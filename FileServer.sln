@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "FileServer", "FileServer\FileServer.njsproj", "{8AACF6DE-716A-4BD8-AB6E-6C49431CE403}"
+EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "MinFile", "MinFile\MinFile.njsproj", "{2A7F5C81-2FC7-4DEC-9CF2-11BEFE448F92}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AACF6DE-716A-4BD8-AB6E-6C49431CE403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AACF6DE-716A-4BD8-AB6E-6C49431CE403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AACF6DE-716A-4BD8-AB6E-6C49431CE403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AACF6DE-716A-4BD8-AB6E-6C49431CE403}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A7F5C81-2FC7-4DEC-9CF2-11BEFE448F92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A7F5C81-2FC7-4DEC-9CF2-11BEFE448F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A7F5C81-2FC7-4DEC-9CF2-11BEFE448F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A7F5C81-2FC7-4DEC-9CF2-11BEFE448F92}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,15 @@
+{
+  "name": "Command",
+  "version": "1.0.0",
+  "description": "Command",
+  "main": "./index.js",
+  "author": {
+    "name": "yanyu",
+    "email": "ydg1988825@163.com"
+  },
+  "dependencies": {
+    "mssql": "~3.1.2",
+    "redis": "~2.5.2",
+    "mysql": "~2.10.2"
+  }
+}

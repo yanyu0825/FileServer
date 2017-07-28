@@ -1,0 +1,17 @@
+{
+  "name": "min-file",
+  "version": "0.0.0",
+  "description": "MinFile",
+  "main": "app.js",
+  "author": {
+    "name": "yandingguo"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-imagemin": "^3.1.1",
+    "imagemin-pngquant": "^5.0.0",
+    "gulp-cache": "^0.4.5",
+    "log4js": "latest"
+
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "fileserver",
+  "version": "1.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "description": "文件服务器",
+  "author": {
+    "name": "yandingguo",
+    "email": ""
+  },
+  "dependencies": {
+    "express": "~4.9.0",
+    "body-parser": "~1.8.1",
+    "cookie-parser": "~1.3.3",
+    "morgan": "~1.3.0",
+    "serve-favicon": "~2.1.3",
+    "debug": "~2.0.0",
+    "jade": "~1.6.0",
+    "stylus": "0.42.3",
+    "async": "2.1.2",
+    "mssql": "3.3.0",
+    "redis": "2.6.2",
+    "multiparty": "4.1.2",
+    "log4js": "latest"
+  }
+}

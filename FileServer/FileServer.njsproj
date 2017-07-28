@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>FileServer</Name>
+    <RootNamespace>FileServer</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8aacf6de-716a-4bd8-ab6e-6c49431ce403}</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>bin\www</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <ProjectView>ShowAllFiles</ProjectView>
+    <NodejsPort>1337</NodejsPort>
+    <StartWebBrowser>true</StartWebBrowser>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="bin\Microsoft.NodejsTools.WebRole.dll" />
+    <Content Include="bin\www" />
+    <Content Include="Config\log4js.json" />
+    <Content Include="package.json" />
+    <Content Include="public\query.html" />
+    <Content Include="README.md" />
+    <Compile Include="app.js" />
+    <Compile Include="Helper\CrytoHelper.js" />
+    <Compile Include="Helper\Log4jsHelper.js" />
+    <Compile Include="Config\dbs.js" />
+    <Compile Include="Config\FileConfig.js" />
+    <Compile Include="Config\img.js" />
+    <Compile Include="Data\fileinfoms.js" />
+    <Compile Include="Data\index.js" />
+    <Compile Include="Data\inforedis.js" />
+    <Compile Include="launcher.js" />
+    <Compile Include="Model\BaseModel.js" />
+    <Compile Include="Model\fileinfomodel.js" />
+    <Compile Include="Model\filemodel.js" />
+    <Compile Include="Model\GetUserInfoModel.js" />
+    <Compile Include="Model\TestModel.js" />
+    <Content Include="public\test.html" />
+    <Compile Include="routes\files.js" />
+    <Compile Include="routes\index.js" />
+    <Compile Include="routes\users.js" />
+    <Content Include="typings.json" />
+    <Content Include="Web.config" />
+    <TypeScriptCompile Include="typings\globals\async\index.d.ts" />
+    <TypeScriptCompile Include="typings\globals\node\index.d.ts" />
+    <TypeScriptCompile Include="typings\index.d.ts" />
+    <Content Include="uploads\default.jpg" />
+    <Content Include="views\error.jade" />
+    <Content Include="views\files.jade" />
+    <Content Include="views\index.jade" />
+    <Content Include="views\layout.jade" />
+    <Compile Include="Data\lib\Base.js" />
+    <Compile Include="Data\lib\code.js" />
+    <Compile Include="Data\lib\getinfo.js" />
+    <Compile Include="Data\lib\new.js" />
+    <Compile Include="Data\lib\newcache.js" />
+    <Compile Include="Data\lib\newfile - Copy.js" />
+    <Compile Include="Data\lib\newfile.js" />
+    <Content Include="Helper\db\package.json" />
+    <Compile Include="Helper\db\index.js" />
+    <Compile Include="Helper\db\lib\mssql.js" />
+    <Compile Include="Helper\db\lib\mysql.js" />
+    <Compile Include="Helper\db\lib\redis.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
+    <Folder Include="Config" />
+    <Folder Include="Data" />
+    <Folder Include="Data\lib" />
+    <Folder Include="Helper" />
+    <Folder Include="Helper\db" />
+    <Folder Include="Helper\db\lib" />
+    <Folder Include="Model" />
+    <Folder Include="public" />
+    <Folder Include="routes" />
+    <Folder Include="typings\" />
+    <Folder Include="typings\globals\" />
+    <Folder Include="typings\globals\async\" />
+    <Folder Include="typings\globals\node\" />
+    <Folder Include="uploads" />
+    <Folder Include="views" />
+  </ItemGroup>
+  <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
