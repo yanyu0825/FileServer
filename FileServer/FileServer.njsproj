@@ -38,6 +38,7 @@
     <Content Include="README.md" />
     <Compile Include="app.js" />
     <Compile Include="Helper\CrytoHelper.js" />
+    <Compile Include="Helper\RedisLogHelper.js" />
     <Compile Include="Helper\Log4jsHelper.js" />
     <Compile Include="Config\dbs.js" />
     <Compile Include="Config\FileConfig.js" />

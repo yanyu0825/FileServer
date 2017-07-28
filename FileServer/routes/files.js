@@ -9,7 +9,7 @@ var fileconfig = require("../config/fileconfig");
 var filemodel = require("../model/filemodel");
 var fileinfomodel = require("../model/fileinfomodel");
 var guid = require("../Helper/CrytoHelper");
-var loghelper = require('../Helper/Log4jsHelper');
+var loghelper = require('../Helper/RedisLogHelper');
 
 
 /* 文件管理器 

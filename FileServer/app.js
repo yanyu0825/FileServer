@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var files = require('./routes/files');
-var log = require('./Helper/Log4jsHelper');
+var log = require('./Helper/RedisLogHelper');
 
 var app = express();
 

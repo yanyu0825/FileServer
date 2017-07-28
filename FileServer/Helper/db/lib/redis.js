@@ -41,7 +41,7 @@ function RedisCommand(config) {
                         });
                     });
                 } catch (e) {//虽然觉得无用 留着吧
-                    self._quitconnection(function () {
+                    self._quitconnection(client,function () {
                         self.senddata(e, null);
                     });
                 }

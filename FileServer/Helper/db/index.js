@@ -10,17 +10,6 @@ var Classes = Object.create(null);
 //        ,password: '111111'
 //    }
 //}
-exports.command = function (config,cb) {
-    //if (!config.name)//判断是否需要一直链接不关闭链接
-    //return loadClass(config.command).init(config.config);
-
-    var Class = loadClass(config.command);
-    var command= new Class(config.config);
-    command.on("data", function (error,data) {
-        cb(error,data);
-    });
-    return command;
-};
 
 exports.command = function (config, cb) {
     //if (!config.name)//判断是否需要一直链接不关闭链接

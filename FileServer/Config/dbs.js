@@ -44,7 +44,17 @@
                 //}
             }
         }
-
+        , logredis: {
+            command: "redis", config: {
+                name: 'log'
+                , port: 6379
+                , host: 'ydg1988825.gicp.net'
+                , database: 0
+                //,options: {
+                //    autoretry: false
+                //}
+            }
+        }
 
 
 
