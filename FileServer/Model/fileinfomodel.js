@@ -58,6 +58,26 @@ fileinfomodel.prototype.getinfo = function (code, cb) {
 
 }
 
+//param={ "code": req.params.code, "userid": userid }
+fileinfomodel.prototype.deleteinfo = function (param, cb) {
+    
+    getinfoms.disabled(param, function (err, result) {
+        if (err || !result) {
+            cb(err, null);
+            return;
+        }
+        if (result) {
+            //数据缓存到redis
+            getinforedis.disabled(param.code, function (err, Data) {
+                // 返回
+                cb(err, Data)
+            });
+
+        }
+    })
+
+}
+
 //entity = {"code":"","address":"","mimetype":"","createuserid":1}
 fileinfomodel.prototype.newinfo = function (entity, cb) {
     if (!entity || !entity.code || !entity.address || !entity.mimetype || !entity.createuserid)

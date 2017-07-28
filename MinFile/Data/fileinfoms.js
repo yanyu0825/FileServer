@@ -40,4 +40,30 @@ fileinfoms.prototype.newinfo = function (param, action) {
     });
 }
 
+/// param= 文件名
+fileinfoms.prototype.getpath = function (address,action) {
+    //实例化cmd
+    var mscommand = cmd.command(dbconfig, action);
+
+    //执行查询
+    mscommand.execute(function (client, cb, sql) {
+        var str = 'select  [address] from [file] where [address] like @code';
+        client.input('code', sql.VarChar, "%" + address)//
+
+        client.query(str).then(function (result) {
+            if (result && result[0]) {
+                var add = result[0].address;
+                cb(null, add.substring(0, add.length - address.length));
+                //cb(null, add);
+            } else
+            {
+                cb(new Error("无数据"), null);
+            }
+        }).catch(function (err) {
+            cb(err, null);
+        });
+    });
+}
+
+
 module.exports = new fileinfoms()

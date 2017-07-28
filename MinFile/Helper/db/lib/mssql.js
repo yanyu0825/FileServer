@@ -97,5 +97,4 @@ MSSqlCommand.prototype._quitconnection = function (cb) {
     cb();
 };
 
-
 module.exports = MSSqlCommand; 

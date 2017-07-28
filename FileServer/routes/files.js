@@ -39,7 +39,7 @@ router.get('/query/:size/:page', function (req, res) {
         //res.render('files', { title: 'File', data: result });
     });
 
-}); 
+});
 
 /*获取文件网页打开*/
 router.get('/get/:code', function (req, res, next) {
@@ -181,7 +181,21 @@ router.post('/upload', function (req, res) {
 });
 
 
+/*删除文件*/
+router.get('/del/:code', function (req, res) {
+    //读取userid
+    var userid = 1;
 
+    fileinfomodel.deleteinfo({ "code": req.params.code, "userid": userid }, function (error, result) {
+        if (error) {
+            loghelper.debug(error);
+            res.status(503);// 返回自定义的404
+            res.render("error", { message: error, error: { status: "503" } });
+            return;
+        }
+        res.json(result);
+    });
+});
 
 
 module.exports = router;

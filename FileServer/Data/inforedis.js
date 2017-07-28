@@ -66,4 +66,16 @@ inforedis.prototype.setinfo = function (entity, action) {
     })
 }
 
+inforedis.prototype.disabled = function (code, action) {
+
+    //实例化cmd
+    var rediscmd = cmd.command(dbconfig, action);
+
+    rediscmd.execute(function (client, cb) {
+        client.hdel("fileinfo", code,function (err, data) {
+            cb(err, data>0);
+        });
+    })
+}
+
 module.exports = new inforedis();
