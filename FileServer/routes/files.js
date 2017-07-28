@@ -39,7 +39,7 @@ router.get('/query/:size/:page', function (req, res) {
         //res.render('files', { title: 'File', data: result });
     });
 
-});
+}); 
 
 /*获取文件网页打开*/
 router.get('/get/:code', function (req, res, next) {

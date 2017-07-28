@@ -26,7 +26,7 @@ helper.info = function (msg) {
 helper.use = function (app) {
     //页面请求日志, level用auto时,默认级别是WARN
     app.use(function (request, response, next) {
-        insertToRedis("访问记录", request.baseUrl,"Info")
+        insertToRedis("访问记录", request.originalUrl,"Info")
         next();
     });
 }
@@ -34,8 +34,9 @@ helper.use = function (app) {
 
 
 function insertToRedis(title, msg, logtype) {
-    
-    var param = JSON.stringify({ title: title, content: msg, appname: "fileserver", logtype: logtype, time: new Date().toLocaleString() });
+    var content = ((typeof msg == 'string') && msg.constructor == String) ? msg : JSON.stringify(msg)
+
+    var param = JSON.stringify({ title: title, content: content, appname: "fileserver", logtype: logtype, time: new Date().toLocaleString() });
 
     
     //执行查询
