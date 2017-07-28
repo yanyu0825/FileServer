@@ -1,17 +1,14 @@
-{  
-   "customBaseDir" : "./logs/",    
-    "customDefaultAtt" : {
-        "type": "dateFile",  
-        "absolute": false,   
-        "alwaysIncludePattern": true 
-    }, 
-    "appenders": [  
-        { "type": "console", "category": "console" },  
-        { "pattern": "debug_yyyyMMddhh.txt", "category": "logDebug" },    
-        { "pattern": "info_yyyyMMddhh.txt", "category": "logInfo" },  
-        { "pattern": "warn_yyyyMMddhh.txt", "category": "logWarn" },  
-        { "pattern": "err_yyyyMMddhh.txt", "category": "logErr" }
-    ],  
-    "replaceConsole": true,  
-    "levels": { "logDebug": "ALL", "logInfo": "ALL", "logWarn": "ALL", "logErr": "ALL" }  
+{
+  "customBaseDir": "./logs/",
+  "customDefaultAtt": {
+    "type": "dateFile",
+    "absolute": false,
+    "alwaysIncludePattern": true
+  },
+  "appenders": {
+    "console": {
+      "type": "console"
+    }
+  },
+  "categories": {"default": { "appenders": ["console"], "level": "all" } }
 }  

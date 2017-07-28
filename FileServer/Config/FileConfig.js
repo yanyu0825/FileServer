@@ -44,7 +44,7 @@ fileconfig.prototype.getdefaultfile = function (mimetype, callback) {
 //获取图片生成地址的真实文件夹
 fileconfig.prototype.getrealpath = function () {
     var now = new Date();
-    var realpath = pathmethod.join(config.realdir, now.getFullYear().toString(), (now.getMonth()+1).toString(), now.getDate().toString());
+    var realpath = pathmethod.join(config.realdir, now.getFullYear().toString()+(now.getMonth()+1).toString());
 
     mkdirsSync(realpath);
     return realpath;
@@ -54,7 +54,8 @@ fileconfig.prototype.getrealpath = function () {
 //获取图片上传文件夹
 fileconfig.prototype.gettemppath = function () {
     var now = new Date();
-    var path = pathmethod.join(config.tempdir, now.getFullYear().toString(), (now.getMonth() + 1).toString(), now.getDate().toString());
+    //var path = pathmethod.join(config.tempdir, now.getFullYear().toString() , (now.getMonth() + 1).toString(), now.getDate().toString());
+    var path = pathmethod.join(config.tempdir, now.getFullYear().toString() + (now.getMonth() + 1).toString());
 
     mkdirsSync(path);
     return path;

@@ -24,63 +24,61 @@ if (objConfig.appenders) {
     var baseDir = objConfig["customBaseDir"];
     var defaultAtt = objConfig["customDefaultAtt"];
 
-    for (var i = 0, j = objConfig.appenders.length; i < j; i++) {
-        var item = objConfig.appenders[i];
-        if (item["type"] == "console")
-            continue;
+    //for (var i = 0, j = objConfig.appenders.length; i < j; i++) {
+    //    var item = objConfig.appenders[i];
+    //    if (item["type"] == "console")
+    //        continue;
 
-        if (defaultAtt != null) {
-            for (var att in defaultAtt) {
-                if (item[att] == null)
-                    item[att] = defaultAtt[att];
-            }
-        }
-        if (baseDir != null) {
-            if (item["filename"] == null)
-                item["filename"] = baseDir;
-            else
-                item["filename"] = baseDir + item["filename"];
-        }
-        var fileName = item["filename"];
-        if (fileName == null)
-            continue;
-        var pattern = item["pattern"];
-        if (pattern != null) {
-            fileName += pattern;
-        }
-        var category = item["category"];
-        //if (!isAbsoluteDir(fileName))//path.isAbsolute(fileName))
-        //    throw new Error("配置节" + category + "的路径不是绝对路径:" + fileName);
-        if (!(path.isAbsolute(fileName)))
-        {
-            fileName = path.resolve(fileName);
-        }
+    //    if (defaultAtt != null) {
+    //        for (var att in defaultAtt) {
+    //            if (item[att] == null)
+    //                item[att] = defaultAtt[att];
+    //        }
+    //    }
+    //    if (baseDir != null) {
+    //        if (item["filename"] == null)
+    //            item["filename"] = baseDir;
+    //        else
+    //            item["filename"] = baseDir + item["filename"];
+    //    }
+    //    var fileName = item["filename"];
+    //    if (fileName == null)
+    //        continue;
+    //    var pattern = item["pattern"];
+    //    if (pattern != null) {
+    //        fileName += pattern;
+    //    }
+    //    var category = item["category"];
+    //    //if (!isAbsoluteDir(fileName))//path.isAbsolute(fileName))
+    //    //    throw new Error("配置节" + category + "的路径不是绝对路径:" + fileName);
+    //    if (!(path.isAbsolute(fileName)))
+    //    {
+    //        fileName = path.resolve(fileName);
+    //    }
 
-        var dir = path.dirname(fileName);
-        checkAndCreateDir(dir);
-    }
+    //    var dir = path.dirname(fileName);
+    //    checkAndCreateDir(dir);
+    //}
 }
 
 // 目录创建完毕，才加载配置，不然会出异常
 log4js.configure(objConfig);
 
-var logDebug = log4js.getLogger('logDebug');
-var logInfo = log4js.getLogger('logInfo');
-var logWarn = log4js.getLogger('logWarn');
-var logErr = log4js.getLogger('logErr');
-var logconsole = log4js.getLogger('console');
+//var logDebug = log4js.getLogger('logDebug');
+//var logInfo = log4js.getLogger('logInfo');
+//var logWarn = log4js.getLogger('logWarn');
+//var logErr = log4js.getLogger('logErr');
+var logconsole = log4js.getLogger();
 
 helper.debug = function (msg) {
-    if (msg == null)
-        msg = "";
-    logDebug.debug(msg);
+    if (msg != null)
     logconsole.debug(msg);
 };
 
 helper.info = function (msg) {
-    if (msg == null)
-        msg = "";
-    logInfo.info(msg);
+    if (msg != null)
+      
+    logconsole.info(msg);
 };
 
 // 配合express用的方法

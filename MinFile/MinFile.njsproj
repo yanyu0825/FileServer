@@ -31,17 +31,32 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
-    <Compile Include="Config\Config.js" />
     <Compile Include="Config\dbs.js" />
+    <Compile Include="Data\fileinfoms.js" />
+    <Compile Include="Data\lib\code.js" />
+    <Compile Include="Data\lib\getinfo.js" />
+    <Compile Include="Data\lib\new.js" />
+    <Compile Include="Data\lib\newcache.js" />
+    <Compile Include="Data\lib\newfile - Copy.js" />
+    <Compile Include="Data\lib\newfile.js" />
     <Compile Include="Helper\CrytoHelper.js" />
+    <Compile Include="Helper\db\index.js" />
+    <Compile Include="Helper\db\lib\mssql.js" />
+    <Compile Include="Helper\db\lib\mysql.js" />
+    <Compile Include="Helper\db\lib\redis.js" />
     <Compile Include="Helper\Log4jsHelper.js" />
+    <Compile Include="Helper\RedisLogHelper.js" />
     <Content Include="Config\log4js.json" />
+    <Content Include="Helper\db\package.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Config\" />
     <Folder Include="Helper\" />
+    <Folder Include="Data\" />
+    <Folder Include="Helper\db\" />
+    <Folder Include="Helper\db\lib\" />
     <Folder Include="typings\" />
     <Folder Include="typings\globals\" />
     <Folder Include="typings\globals\node\" />

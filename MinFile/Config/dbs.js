@@ -1,15 +1,6 @@
 ﻿var dbs =
     {
-        account: {
-            command: "mysql", config: {
-                host: '192.168.1.8'
-                //, port: 3306
-                , database: 'Account_New'
-                , user: 'root'
-                , password: '111111'
-            }
-        }
-        , file: {
+        file: {
             command: "mssql", config: {
                 server: 'ydg1988825.gicp.net'
                 , database: 'File',
@@ -22,30 +13,6 @@
                 }
             }
         }
-        , redis: {
-            command: "redis", config: {
-                name: 'identity'
-                , port: 6379
-                , host: 'ydg1988825.gicp.net'
-                , database: 5
-                //,options: {
-                //    autoretry: false
-                //}
-            }
-        }
-        , fileredis: {
-            command: "redis", config: {
-                name: 'filecache'
-                , port: 6379
-                , host: 'ydg1988825.gicp.net'
-                , database: 4
-                //,options: {
-                //    autoretry: false
-                //}
-            }
-        }
-
-
 
 
     };
