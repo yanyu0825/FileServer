@@ -50,6 +50,7 @@
     <Content Include="Helper\db\package.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="typings.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Config\" />

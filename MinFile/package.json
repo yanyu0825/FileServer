@@ -1,7 +1,7 @@
 {
   "name": "min-file",
   "version": "0.0.0",
-  "description": "MinFile",
+  "description": "压缩文件同时同步到指定地址",
   "main": "app.js",
   "author": {
     "name": "yandingguo"
