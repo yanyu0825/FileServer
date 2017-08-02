@@ -1,6 +1,4 @@
 ﻿var express = require('express');
-
-
 var router = express.Router();
 var model = require("../Model/BaseModel.js");
 var model2= require("../Model/GetUserInfoModel.js");
