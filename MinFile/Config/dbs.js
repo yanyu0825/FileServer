@@ -2,10 +2,10 @@
     {
         file: {
             command: "mssql", config: {
-                server: 'ydg1988825.gicp.net'
+                server: 'Testdb-houtai'
                 , database: 'File',
-                user: "sa",
-                password: "Yanyu0825",
+                user: "vanclsysuser",
+                password: "sysuser@vancl",
                 pool: {
                     max: 10,
                     min: 0,

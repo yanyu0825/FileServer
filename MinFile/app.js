@@ -41,10 +41,12 @@ var sourcefile = '../FileServer/uploads/**/*', distfile = '../FileServer/realfil
 
 
 gulp.watch(sourcefile, function (event) {
-    loghelper.info('文件' + event.path + '被执行' + event.type);
     //读取数据库中的地址
     var code = _PATH.basename(event.path);
     var filepath = fileinfoms.getpath(code, function (err, data) {
+        if (err) {
+            loghelper.debug(JSON.stringify(err));
+        }
         if (data) {
             var path = _PATH.normalize(distfile + data);
             gulp.src(event.path)
@@ -73,6 +75,8 @@ gulp.watch(sourcefile, function (event) {
                                 loghelper.debug("文件名" + event.type + ":" + code + ":修改文件状态失败:" + JSON.stringify(err));
                             if (!result)
                                 loghelper.debug("文件名" + event.type + ":" + code + ":修改文件状态失败");
+                            else
+                                loghelper.info('文件' + event.path + '被执行' + event.type);
                         })
                     }
                     //if (event.type == "changed") {

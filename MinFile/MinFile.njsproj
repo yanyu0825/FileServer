@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Config\" />
+    <Folder Include="Data\lib\" />
     <Folder Include="Helper\" />
     <Folder Include="Data\" />
     <Folder Include="Helper\db\" />
