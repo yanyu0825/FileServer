@@ -45,7 +45,6 @@
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
-    <Content Include="Helper\db\package.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <TypeScriptCompile Include="Config\Config.ts" />
@@ -58,27 +57,16 @@
     <TypeScriptCompile Include="Helper\CrytoHelper.ts" />
     <TypeScriptCompile Include="Helper\Interface\ILog.ts" />
     <TypeScriptCompile Include="Helper\LogHelper.ts" />
-    <TypeScriptCompile Include="model\Base.ts" />
-    <TypeScriptCompile Include="model\ClientIDModel.ts" />
-    <TypeScriptCompile Include="model\RedisStringModel.ts" />
-    <TypeScriptCompile Include="model\VisiterModel.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Config\" />
     <Folder Include="Data\" />
     <Folder Include="Data\Interface\" />
     <Folder Include="Helper\" />
-    <Folder Include="Helper\db\" />
-    <Folder Include="Helper\db\lib\" />
     <Folder Include="Helper\Interface\" />
-    <Folder Include="model\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\fileinfoms.js" />
     <Compile Include="Data\SourceKey.js" />
-    <Compile Include="Helper\db\index.js" />
-    <Compile Include="Helper\db\lib\mysql.js" />
-    <Compile Include="Helper\db\lib\redis.js" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />

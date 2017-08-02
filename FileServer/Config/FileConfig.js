@@ -41,28 +41,31 @@ fileconfig.prototype.getdefaultfile = function (mimetype, callback) {
     return path;
 }
 
-//获取图片生成地址的真实文件夹
-fileconfig.prototype.getrealpath = function () {
-    var now = new Date();
-    var realpath = pathmethod.join(config.realdir, now.getFullYear().toString()+(now.getMonth()+1).toString());
+////获取图片生成地址的真实文件夹
+//fileconfig.prototype.getrealpath = function () {
+//    var now = new Date();
+//    var realpath = pathmethod.join(config.realdir, now.getFullYear().toString() + (now.getMonth() + 1).toString());
+//    //var realpath = config.realdir;
 
-    mkdirsSync(realpath);
-    return realpath;
-}
+//    mkdirsSync(realpath);
+//    return realpath;
+//}
 
 
 //获取图片上传文件夹
 fileconfig.prototype.gettemppath = function () {
     var now = new Date();
     //var path = pathmethod.join(config.tempdir, now.getFullYear().toString() , (now.getMonth() + 1).toString(), now.getDate().toString());
-    var path = pathmethod.join(config.tempdir, now.getFullYear().toString() + (now.getMonth() + 1).toString());
+    //var path = pathmethod.join(config.tempdir, now.getFullYear().toString() + (now.getMonth() + 1).toString());
+    var path = config.tempdir;
 
     mkdirsSync(path);
     return path;
 }
 //截断地址中的主文件夹--返回如片的相对目录
 fileconfig.prototype.getsqlpath = function (address) {
-    return pathmethod.relative(config.tempdir, address);
+    var now = new Date();
+    return pathmethod.normalize(pathmethod.join(now.getFullYear().toString() + (now.getMonth() + 1).toString(),pathmethod.relative(config.tempdir, address)));
 }
 
 

@@ -1,34 +1,29 @@
-﻿import { MSCommand } from "./Interface/MSCommand";
-import { TYPES } from "mssql";
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const MSCommand_1 = require("./Interface/MSCommand");
+const mssql_1 = require("mssql");
 //clientid 缓存
-export class FileInfoMS {
-
-    private rediscommand: MSCommand = null;
-
+class FileInfoMS {
     constructor(config) {
-        this.rediscommand = new MSCommand(config);
+        this.rediscommand = null;
+        this.rediscommand = new MSCommand_1.MSCommand(config);
     }
-
-    public EnabledFile(code: string): Promise<boolean> {
-        let back: boolean = false;
+    EnabledFile(code) {
+        let back = false;
         return this.rediscommand.execute(client => {
-            client.input('code', TYPES.VarChar, "%" + code)//
+            client.input('code', mssql_1.TYPES.VarChar, "%" + code); //
             return client.query('update [file] set [status]=1 where  [address] like @code and [status]=0').then(result => {
                 back = result[0].rowsAffected > 0;
             });
         }).then(function () {
             return back;
-        })
+        });
     }
-
-
-    public GetPath(address): Promise<string> {
-        let back: string = null;
-
+    GetPath(address) {
+        let back = null;
         //执行查询
         return this.rediscommand.execute(client => {
-            client.input('code', TYPES.VarChar, "%" + address)//
+            client.input('code', mssql_1.TYPES.VarChar, "%" + address); //
             return client.query('select  [address] from [file] where [address] like @code').then(result => {
                 if (result.recordset && result.recordset[0] && result.recordset[0].address) {
                     var add = result.recordset[0].address;
@@ -41,7 +36,6 @@ export class FileInfoMS {
             return back;
         });
     }
-
-
 }
-
+exports.FileInfoMS = FileInfoMS;
+//# sourceMappingURL=FileInfoMS.js.map

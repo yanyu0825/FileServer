@@ -11,41 +11,57 @@ export class MSCommand implements IConnection<Request> {
 
     //执行主入口 这个是关闭连接
     public execute(cb: (client: Request) => Promise<void>): Promise<void> {
-        let conn: ConnectionPool = null;
-        return this._createConnection().then(result => {
-            conn = result;
-            return new Request(result);
-        }).then(cb).then(() => {
-            return this._quitconnection(conn);
-        }).catch((error) => {
-            return this._quitconnection(conn).then(() => {
-                throw error;
-            });
-        });
+        //let conn: ConnectionPool = null;
+        //return this._createConnection().then(result => {
+        //    conn = result;
+        //    return conn;
+        //}).then(cb).then(() => {
+        //    return this._quitconnection(conn);
+        //}).catch((error) => {
+        //    return this._quitconnection(conn).then(() => {
+        //        throw error;
+        //    });
+        //});
+
+        return this._createConnection().then(pool => new Request(pool)).then(cb);
     };
 
     //执行主入口 这个是关闭连接
-    //public transaction(cb: (client: Request) => Promise<void>): Promise<void> {
-    //    let transaction: Transaction = null;
-    //    return this._createConnection().then(result => {
-    //        transaction = new Transaction(result);
-    //        return transaction.begin().then(() => {
-    //            return new Request(transaction);
-    //        })
-    //    }).then(cb).then(() => {
-    //        return transaction.commit()
-    //    }).then(() => {
-    //        return this._quitconnection(transaction.ConnectionPool);
-    //    }).catch((error) => {
-    //        if (transaction && transaction.ConnectionPool.connected) {
-    //            return transaction.rollback().then(() => {
-    //                return this._quitconnection(transaction.ConnectionPool).then(() => {
-    //                    throw error;
-    //                });;
-    //            })
-    //        }
-    //    });
-    //};
+    public transaction(cb: (client: Request) => Promise<void>): Promise<void> {
+        //    let transaction: Transaction = null;
+        //    return this._createConnection().then(result => {
+        //        transaction = new Transaction(result);
+        //        return transaction.begin().then(() => {
+        //            return new Request(transaction);
+        //        })
+        //    }).then(cb).then(() => {
+        //        return transaction.commit()
+        //    }).then(() => {
+        //        return this._quitconnection(transaction.ConnectionPool);
+        //    }).catch((error) => {
+        //        if (transaction && transaction.ConnectionPool.connected) {
+        //            return transaction.rollback().then(() => {
+        //                return this._quitconnection(transaction.ConnectionPool).then(() => {
+        //                    throw error;
+        //                });;
+        //            })
+        //        }
+        //    });
+
+        let transaction: Transaction = null;
+        return this._createConnection().then(result => {
+            transaction = new Transaction(result);
+            return transaction.begin().then(() => {
+                return new Request(transaction);
+            })
+        }).then(cb).then(() => {
+            return transaction.commit()
+        }).catch((error) => {
+            return transaction.rollback().then(() => {
+                throw error;
+            })
+        });
+    };
 
     private _createConnection(): Promise<ConnectionPool> {
         return new ConnectionPool(this.config).connect();

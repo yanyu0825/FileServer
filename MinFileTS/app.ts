@@ -11,17 +11,20 @@ var imagemin = require('gulp-imagemin'),
     pngquant = require('imagemin-pngquant'),
     cache = require('gulp-cache'),
     loghelper = new LogHelper(),
-    fileinfoms = new FileInfoMS(Config.filesredis);
+    fileinfoms = new FileInfoMS(Config.filesdb);
 //var strredis = new StrRedis(Config.filesredis);
 
 const sourcefile: string = '../FileServer/uploads/**/*', distfile = '../FileServer/realfiles/';
 
-gulp.watch(sourcefile, function (event) {
+gulp.watch(sourcefile, (event) => {
+    if (event.type == "deleted") {
+        return loghelper.debug(event.path, "删除文件");
+    }
     //读取数据库中的地址
     var code = _PATH.basename(event.path);
     var filepath = fileinfoms.GetPath(code).then(data => {
         if (data) {
-            var path = _PATH.normalize(distfile + data);
+            var path = _PATH.normalize(_PATH.join(distfile, data));
             gulp.src(event.path)
                 .pipe(cache(imagemin({
                     optimizationLevel: 5, //类型：Number  默认：3  取值范围：0-7（优化等级）
@@ -41,15 +44,14 @@ gulp.watch(sourcefile, function (event) {
                 .on('end', () => {
                     //发生的变动的类型：added, changed 或者 deleted。
                     if (event.type == "added") {
-                        var code = _PATH.basename(event.path);
                         //修改数据库文件状态
                         fileinfoms.EnabledFile(code).then(result => {
                             if (!result)
-                                loghelper.debug("文件名" + event.type + ":" + code + ":修改文件状态失败");
+                                loghelper.debug("修改文件" + code + "状态失败,文件：" + event.type);
                             else
-                                loghelper.debug('文件' + event.path + '被执行' + event.type);
+                                loghelper.debug('成功执行文件' + event.path + '：' + event.type);
                         }).catch(err => {
-                            loghelper.error(err, "文件名" + event.type + ":" + code + ":修改文件状态失败:");
+                            loghelper.error(err, "修改文件" + code + "状态失败,文件：" + event.type);
                         })
                     }
                     //if (event.type == "changed") {
@@ -63,11 +65,11 @@ gulp.watch(sourcefile, function (event) {
         }
 
     }).catch(err => {
-        loghelper.error(err);
+        loghelper.error(err, event.type + "文件" + code);
     });
 });
 
-loghelper.debug("服务启动成功");
+console.log("服务启动成功");
 
 
 
