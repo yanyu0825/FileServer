@@ -1,74 +1,30 @@
-﻿import { RedisCommand } from "./Interface/RedisCommand";
+﻿import * as base from "./BaseRedis";
 import { FileInfoEntity, QueryFileInfoParamEntity, QueryResultEntity } from "../Entity/FileInfoEntity"
-import { TYPES } from "mssql";
-import pathmethod = require('path');
+
+export declare var IncEntity: base.IncEntity;
 
 const key: string = "fileinfo"
 
 //clientid 缓存
-export class FileInfoRedis {
-
-    private command: RedisCommand = null;
-
+export class FileInfoRedis extends base.BaseRedis{
+    
     constructor(config) {
-        this.command = new RedisCommand(config);
+        super(config, "");
     }
 
     //查询文件信息
     public GetInfo(code: string): Promise<FileInfoEntity> {
-        let back: FileInfoEntity = null;
-        return this.command.execute(client => {
-            return new Promise<void>((resolve, reject) => {
-                client.hmget(key, code, (err, data) => {
-                    if (err)
-                        reject(err);
-                    else {
-                        back = data && data.length > 0 ? JSON.parse(data[0]) : null;
-                        resolve();
-                    }
-                });
-            });
-        }).then(function () {
-            return back;
-        })
+        return this.HMGet(key, code);
     }
 
     //添加一个文件
     public SetInfo(entity: FileInfoEntity): Promise<boolean> {
-        let back: boolean = false;
-        return this.command.execute(client => {
-            return new Promise<void>((resolve, reject) => {
-                client.hmset(key, entity.code, JSON.stringify(entity), function (err, data) {
-                    if (err)
-                        reject(err);
-                    else {
-                        back = data;
-                        resolve();
-                    }
-                });
-            });
-        }).then(() => {
-            return back;
-        })
+        return this.HMSet(key, entity.code, JSON.stringify(entity));
     }
 
     //禁用文件
     public Disabled(code: string): Promise<boolean> {
-        let back: boolean = false;
-        return this.command.execute(client => {
-            return new Promise<void>((resolve, reject) => {
-                client.hdel(key, code, (err, data) => {
-                    if (err)
-                        reject(err);
-                    else {
-                        back = data > 0;
-                        resolve();
-                    }
-                });
-            });
-        }).then(() => {
-            return back;
-        })
+        return this.HDel(key, code);
     }
 
 }

@@ -1,6 +1,4 @@
-﻿import { IncRedis, IncEntity } from "../data/IncRedis";
-import { StrRedis } from "../data/StrRedis";
-
+﻿import { IncRedis, StrRedis, IncEntity } from "../data/CommonRedis";
 import { Config } from '../Config/Config';
 import { Base } from "./Base";
 

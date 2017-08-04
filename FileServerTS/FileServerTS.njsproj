@@ -59,21 +59,21 @@
     <TypeScriptCompile Include="Config\Config.ts" />
     <TypeScriptCompile Include="Data\FileInfoRedis.ts" />
     <TypeScriptCompile Include="Data\FileInfoMS.ts" />
-    <TypeScriptCompile Include="Data\IncRedis.ts" />
     <TypeScriptCompile Include="Data\Interface\IConnection.ts" />
     <TypeScriptCompile Include="Data\Interface\MSCommand.ts" />
     <TypeScriptCompile Include="Data\Interface\RedisCommand.ts" />
-    <TypeScriptCompile Include="Data\StrRedis.ts" />
-    <TypeScriptCompile Include="Data\UserDB.ts" />
+    <TypeScriptCompile Include="Data\BaseRedis.ts" />
+    <TypeScriptCompile Include="Data\CommonRedis.ts" />
     <TypeScriptCompile Include="Entity\FileInfoEntity.ts" />
     <TypeScriptCompile Include="Helper\CrytoHelper.ts" />
     <TypeScriptCompile Include="Helper\Interface\ILog.ts" />
     <TypeScriptCompile Include="Helper\LogHelper.ts" />
+    <TypeScriptCompile Include="Helper\PMSHelper.ts" />
     <TypeScriptCompile Include="Helper\TestLogHelper.ts" />
     <TypeScriptCompile Include="model\Base.ts" />
     <TypeScriptCompile Include="model\FileInfoModel.ts" />
     <TypeScriptCompile Include="model\FileModel.ts" />
-    <TypeScriptCompile Include="model\ClientIDModel.ts" />
+    <TypeScriptCompile Include="model\UserModel.ts" />
     <TypeScriptCompile Include="model\RedisStringModel.ts" />
     <TypeScriptCompile Include="routes\Files.ts" />
     <TypeScriptCompile Include="routes\index.ts" />
@@ -107,7 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\SourceKey.js" />
-    <Compile Include="Helper\CrytoHelper.js" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />

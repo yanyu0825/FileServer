@@ -4,11 +4,16 @@ import favicon = require('serve-favicon');
 import logger = require('morgan');
 import cookieParser = require('cookie-parser');
 import bodyParser = require('body-parser');
+import { Config } from './Config/Config';
+import { UserModel } from './model/UserModel';
+import { LogHelper } from './Helper/LogHelper';
 
 import routes = require('./routes/index');
 import users = require('./routes/user');
 import files = require('./routes/files');
 
+var loghelper = new LogHelper();
+var usermodel = new UserModel(loghelper);
 var app: express.Express = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,17 +31,41 @@ app.use(cookieParser('secret'));
 //app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+////账号登录状态验证
+app.use((req, res, next) => {
+    new Promise<string>((resolve, reject) => {
+        //读取token
+        let token: string = req.cookies[Config.token.name];
+        if (token)
+            resolve(token);
+        else
+            reject(new Error("token为空"))
+    }).then(token => {
+        return usermodel.GetUserID(token);
+    }).then(result => {
+        if (result < 1) {
+            throw new Error("账号登录失效请重新登录");
+        }
+        req.body["userid"] = result;
+        next();
+    }).catch(err => {
+        if (req.accepts().some((item, index, arry) => {
+            return "text/html,application/xhtml+xml,application/xml;".includes(item);
+        }) && !req.xhr) {
+            var url = encodeURI(req.protocol + "://" + req.header("host") + req.url);
+            res.redirect(Config.loginurl + "?backurl=" + url);
+        }
+        else
+            res.status(401).render('error', { message: err.message, error: err });
+    })
+});
+
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/files', files);
 
-//catch 404 and forward to error handler
-app.use((req, res, next) => {
-    var err = new Error('Not Found');
-    err['status'] = 404;
-    next(err);
-});
+
 
 // error handlers
 

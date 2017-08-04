@@ -9,10 +9,12 @@ import { Config } from "../Config/Config";
 import { LogHelper } from '../Helper/LogHelper';
 import { FileModel } from "../model/FileModel";
 import { FileInfoModel } from "../model/FileInfoModel";
+import { PMSHelper } from "../Helper/PMSHelper";
+
 import { FileInfoEntity, QueryFileInfoParamEntity, QueryResultEntity } from "../Entity/FileInfoEntity";
 
 var loghelper = new LogHelper();
-
+var pmshelper = new PMSHelper();
 var filemodel = new FileModel(loghelper);
 var fileinfomodel = new FileInfoModel(loghelper);
 
@@ -20,13 +22,12 @@ var fileinfomodel = new FileInfoModel(loghelper);
 
 
 /* 列出所有文件夹 最新的由自己创建的10文件. */
-router.get('/query/:size/:page', function (req, res) {
-    var userid = 1;
+router.get('/query/:size/:page', pmshelper.Use(123), (req, res) => {
 
     let entity = new QueryFileInfoParamEntity();
     entity.size = req.params.size || 10;
     entity.page = req.params.page || 1;
-    entity.userid = userid;
+    entity.userid = req.body.userid;
     //获取最近自己上传的10个文件
     fileinfomodel.Query(entity).then(result => {
         //result = { total: 10, page: 1, data: [{ code: "", address: "", userid: 1, createtime: "", forbidden: false, ext: "" }] }
@@ -35,15 +36,14 @@ router.get('/query/:size/:page', function (req, res) {
         res.render('files', { title: 'File', data: result });
     }).catch(err => {
         loghelper.error(err);
-        res.status(err.status || 500);// 返回自定义的404
-        res.render("error", { message: err.message, error: err });
+        res.status(err.status || 500).render("error", { message: err.message, error: err });
     });
 
 });
 
 /*获取文件网页打开*/
-router.get('/get/:code', function (req, res, next) {
-
+router.get('/get/:code', pmshelper.Use(123),function (req, res, next) {
+    console.log(req.route);
     fileinfomodel.Validate(req.params.code).then(result => {
         if (!result)
             throw new Error("参数不正确");
@@ -67,13 +67,12 @@ router.get('/get/:code', function (req, res, next) {
     }).catch(err => {
         loghelper.error(err);
         //next(); // 返回自带的404
-        res.status(err.status || 500);// 返回自定义的404
-        res.render("error", { message: err.message, error: err });
+        res.status(err.status || 500).render("error", { message: err.message, error: err });
     })
 });
 
 /*下载文件*/
-router.get('/download/:code', function (req, res) {
+router.get('/download/:code', pmshelper.Use(123), function (req, res) {
 
     fileinfomodel.Validate(req.params.code).then(result => {
         if (!result)
@@ -84,7 +83,7 @@ router.get('/download/:code', function (req, res) {
             throw new Error("文件code 不存在");
 
         return filemodel.GetFilePath(result).then(realaddress => {
-           // result.address = a;
+            // result.address = a;
             return realaddress;
         });
     }).then(result => {
@@ -98,15 +97,12 @@ router.get('/download/:code', function (req, res) {
     }).catch(err => {
         loghelper.error(err);
         //next(); // 返回自带的404
-        res.status(err.status || 500);// 返回自定义的404
-        res.render("error", { message: err.message, error: err });
+        res.status(err.status || 500).render("error", { message: err.message, error: err });
     })
 });
 
 /*上传多个文件*/
-router.post('/upload', function (req, res) {
-    //读取userid
-    var userid = 1;
+router.post('/upload', pmshelper.Use(123),function (req, res) {
 
     //生成multiparty对象，并配置上传目标路径
     var form = new multiparty.Form({ autoFiles: true, uploadDir: Config.GetTempPath() });
@@ -125,7 +121,7 @@ router.post('/upload', function (req, res) {
                 entity.code = guid.CrytoHelper.randomString(32);
                 entity.address = Config.GetSqlPath(fileinfo.path);
                 entity.mimetype = fileinfo.headers["content-type"];
-                entity.userid = userid;
+                entity.userid = req.body.userid;
                 return new FileInfoModel(loghelper).NewInfo(entity);
             })
             return Promise.all(tasks);
@@ -139,23 +135,19 @@ router.post('/upload', function (req, res) {
             res.json(result);
         }).catch(err => {
             loghelper.error(err);
-            res.status(err.status || 500);// 返回自定义的404
-            res.render("error", { message: err.message, error: err });
+            res.status(err.status || 500).render("error", { message: err.message, error: err });
         });
     });
 });
 
-
 /*删除文件*/
-router.get('/del/:code', function (req, res) {
+router.get('/del/:code', pmshelper.Use(123), function (req, res) {
     //读取userid
-    var userid = 1;
-    fileinfomodel.DeleteInfo(req.params.code, userid).then(result => {
+    fileinfomodel.DeleteInfo(req.params.code, req.body.userid).then(result => {
         res.json(result);
     }).catch(err => {
         loghelper.debug(err);
-        res.status(err.status || 500);// 返回自定义的404
-        res.render("error", { message: err.message, error: err });
+        res.status(err.status || 500).render("error", { message: err.message, error: err });
     });
 });
 
