@@ -1,200 +1,162 @@
-﻿//import express = require('express');
-//var router = express.Router();
-//var pathmethod = require('path');
-//var fs = require('fs');
+﻿import express = require('express');
+var router: express.Router = express.Router();
+import pathmethod = require('path');
+import fs = require('fs');
 
-//var multiparty = require('multiparty');
+import multiparty = require('multiparty');
+import guid = require("../Helper/CrytoHelper");
+import { Config } from "../Config/Config";
+import { LogHelper } from '../Helper/LogHelper';
+import { FileModel } from "../model/FileModel";
+import { FileInfoModel } from "../model/FileInfoModel";
+import { FileInfoEntity, QueryFileInfoParamEntity, QueryResultEntity } from "../Entity/FileInfoEntity";
 
-//var fileconfig = require("../config/fileconfig");
-//var filemodel = require("../model/filemodel");
-//var fileinfomodel = require("../model/fileinfomodel");
-//var guid = require("../Helper/CrytoHelper");
-//var loghelper = require('../Helper/RedisLogHelper');
+var loghelper = new LogHelper();
 
+var filemodel = new FileModel(loghelper);
+var fileinfomodel = new FileInfoModel(loghelper);
 
-
-///* 文件管理器*/
-
-//router.get('/testgetfile', function (req, res) {
-//    filemodel.getfilepath({ forbidden: true, mimetype: "image/jpeg" }, function (err, result) {
-//        res.sendfile(result.address);
-//    });
-//});
-
-///* 列出所有文件夹 最新的由自己创建的10文件. */
-//router.get('/query/:size/:page', function (req, res) {
-//    var userid = 1;
-
-//    //获取最近自己上传的10个文件
-//    fileinfomodel.queryinfo({ userid: userid, size: req.params.size || 10, page: req.params.page || 1 }, function (err, result) {
-//        //result = { total: 10, page: 1, data: [{ code: "", address: "", userid: 1, createtime: "", forbidden: false, ext: "" }] }
-//        //返回文件
-//        if (err) {
-//            loghelper.debug(err);
-//            res.status(503);// 返回自定义的404
-//            res.render("error", { message: err, error: { status: "503" } });
-//            return;
-//        }
-//        res.json(result);
-//        //res.render('files', { title: 'File', data: result });
-//    });
-
-//});
-
-///*获取文件网页打开*/
-//router.get('/get/:code', function (req, res, next) {
-//    async.waterfall([
-//        function (cb) {
-//            //验证参数code的格式
-//            fileinfomodel.validate(req.params.code, function (result) {
-//                cb(result ? null : new Error("参数不正确"), req.params.code);
-//            });
-//        }, function (param, cb) {
-//            //读取文件的信息
-//            fileinfomodel.getinfo(param, function (err, result) {
-//                if (err || !result)
-//                    cb(err ? err : new Error("文件code 不存在"), null);
-//                else
-//                    cb(err, result);
-//            });
-//        },
-//        function (param, cb) {
-//            //读取本地文件地址  文件地址赋值到参数中 并传值出去
-//            //判断文件默认值  否则抛异常
-//            filemodel.getfilepath(param, cb);
-//        }],
-//        function (err, result) {
-//            //返回文件
-//            if (err) {
-//                loghelper.debug(err);
-//                //next(); // 返回自带的404
-//                res.status(404);// 返回自定义的404
-//                res.render("error", { message: err, error: { status: "404" } });
-//                return;
-//            }
-//            if (result.forbidden) {
-//                res.sendStatus(403);
-//                return;
-//            }
-//            //res.writeHead(200, { "Content-Type": result.mimetype + ";charset=utf-8" });
-//            //var content = fs.readFileSync(result.address);
-//            //res.end(content, "binary");
-//            res.sendFile(result.address, { root: "./" });
-//        });
-
-//});
-
-///*下载文件*/
-//router.get('/download/:code', function (req, res) {
-
-//    async.waterfall([
-//        function (cb) {
-//            //验证参数code的格式
-//            fileinfomodel.validate(req.params.code, function (result) {
-//                cb(result ? null : new Error("参数不正确"), req.params.code);
-//            });
-//        }, function (param, cb) {
-//            //读取文件的信息
-//            fileinfomodel.getinfo(param, function (err, result) {
-//                if (err || !result)
-//                    cb(err ? err : new Error("文件code 不存在"), null);
-//                else
-//                    cb(err, result);
-//            });
-//        },
-//        function (param, cb) {
-//            //读取本地文件地址  文件地址赋值到参数中 并传值出去
-//            //判断文件默认值  否则抛异常
-//            filemodel.getfilepath(param, cb);
-//        }],
-//        function (err, result) {
-//            //返回文件
-//            if (err) {
-//                loghelper.debug(err);
-//                //next(); // 返回自带的404
-//                res.status(404);// 返回自定义的404
-//                res.render("error", { message: err, error: { status: "404" } });
-//                return;
-//            }
-//            if (result.forbidden) {
-//                res.status(403);
-//                res.render("error", { message: "不可访问", error: { status: "403" } });
-//                return;
-//            }
-
-//            //res.writeHead(200, { "Content-Type": "application/octet-stream", "Content-Disposition": "attachment; filename = download" + pathmethod.extname(result.address) });
-//            //var content = fs.readFileSync(result.address);
-//            //res.end(content, "binary");
-//            res.download(result.address);
-//        });
-//});
-
-///*上传多个文件*/
-//router.post('/upload', function (req, res) {
-//    //读取userid
-//    var userid = 1;
-
-//    //生成multiparty对象，并配置上传目标路径
-//    var form = new multiparty.Form({ autoFiles: true, uploadDir: fileconfig.gettemppath() });
-
-//    //上传完成后处理
-//    form.parse(req, function (err, fields, files) { //fields 上传的其他字段值
-//        //var filesTmp = JSON.stringify(files, null, 2); 特殊的json tostring
-
-//        async.waterfall([
-//            function (cb) {
-//                if (err) {
-//                    return cb(err, null);
-//                }
-//                async.map(files.file, function (fileinfo, callback) {
-//                    //添加到数据库
-//                    fileinfomodel.newinfo({ "code": guid.randomString(32), "address": fileconfig.getsqlpath(fileinfo.path), "mimetype": fileinfo.headers["content-type"], "createuserid": userid }, function (error, result) {
-//                        callback(null, result);
-//                    });
-//                }, function (err, results) {
-//                    cb(null, results);
-//                });
-//            },
-//            //function (param, cb) {
-//            //    //重命名为真实文件名
-//            //    fs.rename(uploadedPath, dstPath, function (err) {
-//            //        if (err) {
-//            //            console.log('rename error: ' + err);
-
-//            //        } else {
-//            //            console.log('rename ok');
-//            //        }
-//            //    });
-//            //},
-//        ],
-//            function (err, result) {
-//                //返回文件
-//                if (err) {
-//                    loghelper.debug(err);
-//                    res.status(503);// 返回自定义的404
-//                    res.render("error", { message: err, error: { status: "503" } });
-//                    return;
-//                }
-//                res.json(result);
-//            });
-//    });
-//});
+/* 文件管理器*/
 
 
-///*删除文件*/
-//router.get('/del/:code', function (req, res) {
-//    //读取userid
-//    var userid = 1;
+/* 列出所有文件夹 最新的由自己创建的10文件. */
+router.get('/query/:size/:page', function (req, res) {
+    var userid = 1;
 
-//    fileinfomodel.deleteinfo({ "code": req.params.code, "userid": userid }, function (error, result) {
-//        if (error) {
-//            loghelper.debug(error);
-//            res.status(503);// 返回自定义的404
-//            res.render("error", { message: error, error: { status: "503" } });
-//            return;
-//        }
-//        res.json(result);
-//    });
-//});
+    let entity = new QueryFileInfoParamEntity();
+    entity.size = req.params.size || 10;
+    entity.page = req.params.page || 1;
+    entity.userid = userid;
+    //获取最近自己上传的10个文件
+    fileinfomodel.Query(entity).then(result => {
+        //result = { total: 10, page: 1, data: [{ code: "", address: "", userid: 1, createtime: "", forbidden: false, ext: "" }] }
+        //返回文件
+        //res.json(result);
+        res.render('files', { title: 'File', data: result });
+    }).catch(err => {
+        loghelper.error(err);
+        res.status(err.status || 500);// 返回自定义的404
+        res.render("error", { message: err.message, error: err });
+    });
 
-//export = router;
+});
+
+/*获取文件网页打开*/
+router.get('/get/:code', function (req, res, next) {
+
+    fileinfomodel.Validate(req.params.code).then(result => {
+        if (!result)
+            throw new Error("参数不正确");
+        return fileinfomodel.GetInfo(req.params.code);
+    }).then(result => {
+        if (!result)
+            throw new Error("文件code 不存在");
+
+        return filemodel.GetFilePath(result).then(realaddress => {
+            //result.address = realaddress;
+            return realaddress;
+        });
+    }).then(result => {
+        //res.writeHead(200, { "Content-Type": result.mimetype + ";charset=utf-8" });
+        //var content = fs.readFileSync(result.address);
+        //res.end(content, "binary");
+        res.sendFile(result, { root: "./" }, err => {
+            loghelper.error(err);
+            res.sendStatus(404);
+        });
+    }).catch(err => {
+        loghelper.error(err);
+        //next(); // 返回自带的404
+        res.status(err.status || 500);// 返回自定义的404
+        res.render("error", { message: err.message, error: err });
+    })
+});
+
+/*下载文件*/
+router.get('/download/:code', function (req, res) {
+
+    fileinfomodel.Validate(req.params.code).then(result => {
+        if (!result)
+            throw new Error("参数不正确");
+        return fileinfomodel.GetInfo(req.params.code);
+    }).then(result => {
+        if (!result)
+            throw new Error("文件code 不存在");
+
+        return filemodel.GetFilePath(result).then(realaddress => {
+           // result.address = a;
+            return realaddress;
+        });
+    }).then(result => {
+        //res.writeHead(200, { "Content-Type": "application/octet-stream", "Content-Disposition": "attachment; filename = download" + pathmethod.extname(result.address) });
+        //var content = fs.readFileSync(result.address);
+        //res.end(content, "binary");
+        res.download(result, err => {
+            loghelper.error(err);
+            res.sendStatus(404);
+        });
+    }).catch(err => {
+        loghelper.error(err);
+        //next(); // 返回自带的404
+        res.status(err.status || 500);// 返回自定义的404
+        res.render("error", { message: err.message, error: err });
+    })
+});
+
+/*上传多个文件*/
+router.post('/upload', function (req, res) {
+    //读取userid
+    var userid = 1;
+
+    //生成multiparty对象，并配置上传目标路径
+    var form = new multiparty.Form({ autoFiles: true, uploadDir: Config.GetTempPath() });
+
+    //上传完成后处理
+    form.parse(req, (err, fields, files) => { //fields 上传的其他字段值
+        //var filesTmp = JSON.stringify(files, null, 2); 特殊的json tostring
+        new Promise<boolean>(function (resolve, reject) {
+            if (err)
+                return reject(err);
+            else
+                return resolve(true);
+        }).then(a => {
+            let tasks: Promise<boolean>[] = files.file.forEach(fileinfo => {
+                let entity: FileInfoEntity = new FileInfoEntity();
+                entity.code = guid.CrytoHelper.randomString(32);
+                entity.address = Config.GetSqlPath(fileinfo.path);
+                entity.mimetype = fileinfo.headers["content-type"];
+                entity.userid = userid;
+                return new FileInfoModel(loghelper).NewInfo(entity);
+            })
+            return Promise.all(tasks);
+        }).then(result => {
+            let r = false;
+            result.forEach(item => {
+                r = r && item;
+            })
+            return r;
+        }).then(result => {
+            res.json(result);
+        }).catch(err => {
+            loghelper.error(err);
+            res.status(err.status || 500);// 返回自定义的404
+            res.render("error", { message: err.message, error: err });
+        });
+    });
+});
+
+
+/*删除文件*/
+router.get('/del/:code', function (req, res) {
+    //读取userid
+    var userid = 1;
+    fileinfomodel.DeleteInfo(req.params.code, userid).then(result => {
+        res.json(result);
+    }).catch(err => {
+        loghelper.debug(err);
+        res.status(err.status || 500);// 返回自定义的404
+        res.render("error", { message: err.message, error: err });
+    });
+});
+
+export = router;

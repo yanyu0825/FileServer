@@ -14,7 +14,7 @@ export class FileInfoMS {
         let back: boolean = false;
         return this.rediscommand.execute(client => {
             client.input('code', TYPES.VarChar, "%" + code)//
-            return client.query('update [file] set [status]=1 where  [address] like @code and [status]=0').then(result => {
+            return client.query('update [files] set [status]=1 where  [address] like @code and [status]=0').then(result => {
                 back = result[0].rowsAffected > 0;
             });
         }).then(function () {
@@ -29,7 +29,7 @@ export class FileInfoMS {
         //执行查询
         return this.rediscommand.execute(client => {
             client.input('code', TYPES.VarChar, "%" + address)//
-            return client.query('select  [address] from [file] where [address] like @code').then(result => {
+            return client.query('select  [address] from [files] where [address] like @code').then(result => {
                 if (result.recordset && result.recordset[0] && result.recordset[0].address) {
                     var add = result.recordset[0].address;
                     back = add.substring(0, add.length - address.length);
