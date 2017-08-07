@@ -8,6 +8,7 @@ export class Config {
     public static token = { "maxage": 1200, name: "token" };
     public static loginurl = "http://account.yanyu0825.cn";
 
+    public static openpms: boolean = true; //是否启用权限验证
     //public static account = { maxage: 3600, maxcount: 3 };
     //public static ip = { maxage: 1800, maxcount: 10 };
     //public static client = { maxage: 1200, maxcount: 3, regmaxcount: 3 };
