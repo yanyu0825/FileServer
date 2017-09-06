@@ -43,7 +43,7 @@ export class RedisCommand implements IConnection<RedisClient>{
             //每次新开连接
             let client = createClient(this.config)
                 .on("error", (error) => {
-                    reject(error);
+                    this._quitconnection(client).then(() => reject(error));
                 }).on("connect", a => {
                     resolve(client);
                 });
@@ -51,10 +51,22 @@ export class RedisCommand implements IConnection<RedisClient>{
     };
 
     private _quitconnection(client: RedisClient): Promise<void> {
-        return new Promise<void>((resolve, reject)=> {
-            if (client && client.connected)//链接存在 同时链接已经连接完毕
-                client.quit(); // end or quit
-            resolve();
+        return new Promise<void>((resolve, reject) => {
+            if (client)//链接存在 同时链接已经连接完毕
+            {
+                //如果redis服务没开 quit也不会成功所以这个时候要用end
+                if (client.connected)
+                    client.quit((err, t) => {
+                        if (err)
+                            console.log(err);
+                        resolve();
+                    })
+                else {
+                    client.end(false);
+                    resolve();
+                }
+            } else
+                resolve();
         });
     };
 

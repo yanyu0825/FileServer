@@ -25,3 +25,10 @@ export class IncRedis extends base.BaseRedis {
         super(config, "inc:");
     }
 }
+
+export class HashRedis extends base.BaseRedis {
+
+    constructor(config) {
+        super(config, "hash:");
+    }
+}

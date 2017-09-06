@@ -11,11 +11,11 @@ export class BaseRedis {
             this._source = source;
     }
 
-    public SetList(key: string, value: string): Promise<boolean> {
+    public SetList(key: string, value: string, needprefix: boolean = true): Promise<boolean> {
         let result: boolean = false;
-        return this._rediscommand.execute((client)=> {
+        return this._rediscommand.execute((client) => {
             return new Promise<void>((resolve, reject) => {
-                let realkey = this._source + key;
+                let realkey = needprefix ? this._source + key : key;
                 result = client.rpush(realkey, value, (err, setresult) => {
                     if (err)
                         reject(err);
@@ -25,19 +25,19 @@ export class BaseRedis {
                     }
                 });
             });
-        }).then(()=> {
+        }).then(() => {
             return result;
         })
 
     }
 
-    public Get(param: string): Promise<string> {
+    public Get(param: string, needprefix: boolean = true): Promise<string> {
         let result: string = null;
-        return this._rediscommand.execute((client)=> {
+        return this._rediscommand.execute((client) => {
 
             return new Promise<void>((resolve, reject) => {
-                let key = this._source + param;
-                client.get(key, (err, data) => {
+                let realkey = needprefix ? this._source + param : param;
+                client.get(realkey, (err, data) => {
                     //直接返回不关闭连接
                     if (err) {
                         reject(err);
@@ -49,18 +49,42 @@ export class BaseRedis {
                 });
             });
 
-        }).then(()=> {
+        }).then(() => {
             return result;
         })
 
     }
 
-    public Set(param: string, value: string): Promise<boolean> {
+    public Exists(param: string, needprefix: boolean = true): Promise<boolean> {
+        let result: boolean = false;
+        return this._rediscommand.execute((client) => {
+
+            return new Promise<void>((resolve, reject) => {
+                let realkey = needprefix ? this._source + param : param;
+                result = client.EXISTS(realkey, (err, data) => {
+                    //直接返回不关闭连接
+                    if (err) {
+                        reject(err);
+                    }
+                    else {
+                        result = data > 0;
+                        resolve();
+                    }
+                });
+            });
+
+        }).then(() => {
+            return result;
+        })
+
+    }
+
+    public Set(param: string, value: string, needprefix: boolean = true): Promise<boolean> {
         let result: boolean = false;
         return this._rediscommand.execute((client) => {
             return new Promise<void>((resolve, reject) => {
-                let key = this._source + param;
-                result = client.set(key, value, (err, setresult) => {
+                let realkey = needprefix ? this._source + param : param;
+                result = client.set(realkey, value, (err, setresult) => {
                     if (err)
                         reject(err);
                     else {
@@ -69,27 +93,27 @@ export class BaseRedis {
                     }
                 });
             });
-        }).then(()=> {
+        }).then(() => {
             return result;
         })
 
     }
 
-    public Expire(param: string, maxage: number): Promise<boolean> {
+    public Expire(param: string, maxage: number, needprefix: boolean = true): Promise<boolean> {
         let result: boolean = false;
         return this._rediscommand.execute((client) => {
             return new Promise<void>((resolve, reject) => {
-                let key = this._source + param;
-                result=client.expire(key, maxage, (err, setresult) => {
+                let realkey = needprefix ? this._source + param : param;
+                result = client.expire(realkey, maxage, (err, setresult) => {
                     if (err)
                         reject(err);
                     else {
-                        //result = setresult == 1;
+                        result = setresult == 1;
                         resolve();
                     }
                 });
             });
-        }).then(()=> {
+        }).then(() => {
             return result;
         })
 
@@ -97,14 +121,14 @@ export class BaseRedis {
 
 
 
-    public Inc(param: IncEntity): Promise<boolean> {
+    public Inc(param: IIncEntity, needprefix: boolean = true): Promise<boolean> {
 
         let result: boolean = false;
         return this._rediscommand.execute((client) => {
 
             return new Promise<void>((resolve, reject) => {
-                let key = this._source + param.key;
-                client.incr(key, (err, data) => {
+                let realkey = needprefix ? this._source + param.key : param.key;
+                client.incr(realkey, (err, data) => {
                     //直接返回不关闭连接
                     if (err) {
                         reject(err);
@@ -113,24 +137,24 @@ export class BaseRedis {
 
                         if (param.coverexpire) {
                             //每次都重新设置过期时间
-                            client.expire(key, param.expire, (err, value) => {
+                            client.expire(realkey, param.expire, (err, value) => {
                                 //直接返回不关闭连接
                                 if (err) { reject(err); }
-                                else if (value == 0) { reject(new Error("设置过期时间失败：" + key)); }
+                                else if (value == 0) { reject(new Error("设置过期时间失败：" + realkey)); }
                                 else { result = true; resolve(); }
                             });
 
                         } else {
                             //判断是否存在过期时间
-                            client.ttl(key, (err, ttl) => {
+                            client.ttl(realkey, (err, ttl) => {
                                 if (err) { reject(err); }
                                 else if (ttl > 0) { result = true; resolve(); }
                                 else {
                                     //不存在 重新设置过期时间
-                                    client.expire(key, param.expire, (err, value) => {
+                                    client.expire(realkey, param.expire, (err, value) => {
                                         //直接返回不关闭连接
                                         if (err) { reject(err); }
-                                        else if (value == 0) { reject(new Error("设置过期时间失败：" + key)); }
+                                        else if (value == 0) { reject(new Error("设置过期时间失败：" + realkey)); }
                                         else { result = true; resolve(); }
                                     });
                                 }
@@ -151,16 +175,15 @@ export class BaseRedis {
 
     }
 
-    public Del(key: string): Promise<boolean> {
+    public Del(key: string, needprefix: boolean = true): Promise<boolean> {
         let result: boolean = false;
         return this._rediscommand.execute((client) => {
             return new Promise<void>((resolve, reject) => {
-                let realkey = this._source + key;
+                let realkey = needprefix ? this._source + key : key;
                 result = client.del(realkey, (err, num) => {
                     if (err)
                         reject(err);
-                    else
-                    {
+                    else {
                         resolve();
                     }
                 });
@@ -171,13 +194,13 @@ export class BaseRedis {
 
     }
 
-    public GetCount(param: string): Promise<number> {
+    public GetCount(param: string, needprefix: boolean = true): Promise<number> {
 
         let result: number = 0;
         return this._rediscommand.execute(client => {
             return new Promise<void>((resolve, reject) => {
-                let key = this._source + param;
-                client.get(key, (err, data)=> {
+                let realkey = needprefix ? this._source + param : param;
+                client.get(realkey, (err, data) => {
                     //直接返回不关闭连接
                     if (err) {
                         reject(err);
@@ -195,11 +218,11 @@ export class BaseRedis {
 
 
 
-    public HMGet(key: string, filed: string): Promise<any> {
+    public HMGet(key: string, filed: string, needprefix: boolean = true): Promise<any> {
         let back: any = null;
         return this._rediscommand.execute(client => {
             return new Promise<void>((resolve, reject) => {
-                let realkey = this._source + key;
+                let realkey = needprefix ? this._source + key : key;
                 client.hmget(realkey, filed, (err, data) => {
                     if (err)
                         reject(err);
@@ -209,17 +232,17 @@ export class BaseRedis {
                     }
                 });
             });
-        }).then(()=> {
+        }).then(() => {
             return back;
         })
     }
 
-    public HMSet(key: string, filed: string, value: string): Promise<boolean> {
+    public HMSet(key: string, filed: string, value: string, needprefix: boolean = true): Promise<boolean> {
         let back: boolean = false;
         return this._rediscommand.execute(client => {
             return new Promise<void>((resolve, reject) => {
-                let realkey = this._source + key;
-                client.hmset(realkey, filed, value, (err, data)=> {
+                let realkey = needprefix ? this._source + key : key;
+                client.hmset(realkey, filed, value, (err, data) => {
                     if (err)
                         reject(err);
                     else {
@@ -233,11 +256,11 @@ export class BaseRedis {
         })
     }
 
-    public HDel(key: string, filed: string): Promise<boolean> {
+    public HDel(key: string, filed: string, needprefix: boolean = true): Promise<boolean> {
         let back: boolean = true;
         return this._rediscommand.execute(client => {
             return new Promise<void>((resolve, reject) => {
-                let realkey = this._source + key;
+                let realkey = needprefix ? this._source + key : key;
                 client.hdel(realkey, filed, (err, data) => {
                     if (err)
                         reject(err);
@@ -251,6 +274,121 @@ export class BaseRedis {
             return back;
         })
     }
+
+
+    public HGet(key: string, filed: string, needprefix: boolean = true): Promise<string> {
+        let result: string = null;
+        return this._rediscommand.execute(client => {
+            return new Promise<void>((resolve, reject) => {
+                let realkey = needprefix ? this._source + key : key;
+                client.hget(realkey, filed, (err, data) => {
+                    if (err) {
+                        reject(err);
+                    }
+                    else {
+                        result = data;
+                        resolve();
+                    }
+                });
+            });
+        }).then(() => {
+            return result;
+        })
+    }
+
+    public HSet(key: string, filed: string, content: string, needprefix: boolean = true): Promise<boolean> {
+        let result: boolean = false;
+        return this._rediscommand.execute((client) => {
+            return new Promise<void>((resolve, reject) => {
+                let realkey = needprefix ? this._source + key : key;
+                client.hset(realkey, filed, content, (err, data) => {
+                    if (err) {
+                        reject(err);
+                    }
+                    else {
+                        result = data > 0;
+                        resolve();
+                    }
+                });
+            });
+        }).then(() => {
+            return result;
+        })
+    }
+
+    public Hincrby(key: string, filed: string, needprefix: boolean = true): Promise<boolean> {
+        let result: boolean = false;
+        return this._rediscommand.execute((client) => {
+
+            return new Promise<void>((resolve, reject) => {
+                let realkey = needprefix ? this._source + key : key;
+                client.hincrby(realkey, filed, 1, function (err, data) {
+                    //直接返回不关闭连接
+                    if (err) {
+                        reject(err);
+                    }
+                    else {
+                        result = data > 0;
+                        resolve();
+                    }
+                });
+            });
+
+        }).then(() => {
+            return result;
+        })
+    }
+
+    public Hvals<T>(key: string, needprefix: boolean = true): Promise<T[]> {
+
+        let result: T[] = new Array<T>();
+        return this._rediscommand.execute(client => {
+            return new Promise<void>((resolve, reject) => {
+                let realkey = needprefix ? this._source + key : key;
+                client.hvals(realkey, (err, data) => {
+                    //直接返回不关闭连接
+                    if (err) {
+                        reject(err);
+                    }
+                    else {
+                        data.forEach(item => {
+                            result.push(JSON.parse(item));
+                        })
+                        resolve();
+                    }
+                });
+            })
+        }).then(() => {
+            return result;
+        })
+    }
+
+
+
+    public HincrbyExpire(key: string, filed: string, expire: number, coverexpire: boolean = false, needprefix: boolean = true): Promise<boolean> {
+        return this.Inc({ key: `${key}:${filed}`, expire: expire, coverexpire: coverexpire }, needprefix).then(a => {
+            if (!a)
+                throw new Error("设置过期时间失败");
+            return this.Hincrby(key, filed, needprefix).catch(err => {
+                if (err)
+                    console.log(err);
+                return this.Del(`${key}:${filed}`, needprefix).then(a => false);
+            });
+        });
+    }
+
+    public HGetExpire(key: string, filed: string, needprefix: boolean = true): Promise<number> {
+        return this.Exists(`${key}:${filed}`, needprefix).then(result => {
+            if (!result)
+                return this.HDel(key, filed, needprefix).then(a => {
+                    return 0;
+                });
+            else {
+                return this.HGet(key, filed, needprefix).then(a => parseInt(a));
+            }
+        })
+    }
+
 
 }
 

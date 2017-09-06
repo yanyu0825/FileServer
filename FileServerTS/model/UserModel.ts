@@ -2,7 +2,7 @@
 import { Config } from '../Config/Config';
 import { Base } from "./Base";
 
-const Cmd = new UserRedis(Config.rediscache);
+const Cmd = new UserRedis(Config.userrediscache);
 export class UserModel extends Base {
     private reg: RegExp = new RegExp("^[0-9a-zA-Z]{30}$");
 

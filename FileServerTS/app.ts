@@ -1,7 +1,7 @@
 ﻿import * as  express from 'express';
 import path = require('path');
-import favicon = require('serve-favicon');
-import logger = require('morgan');
+//import favicon = require('serve-favicon');
+//import logger = require('morgan');
 import cookieParser = require('cookie-parser');
 import bodyParser = require('body-parser');
 import { Config } from './Config/Config';
@@ -22,7 +22,7 @@ app.set('trust proxy', true) //如果放到线上使用nginx 或者iisnode必须
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
+//app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -31,7 +31,7 @@ app.use(cookieParser('secret'));
 //app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-////账号登录状态验证
+//账号登录状态验证
 app.use((req, res, next) => {
     new Promise<string>((resolve, reject) => {
         //读取token
@@ -49,14 +49,20 @@ app.use((req, res, next) => {
         req.body["userid"] = result;
         next();
     }).catch(err => {
-        if (req.accepts().some((item, index, arry) => {
-            return "text/html,application/xhtml+xml,application/xml;".includes(item);
-        }) && !req.xhr) {
-            var url = encodeURI(req.protocol + "://" + req.header("host") + req.url);
-            res.redirect(Config.loginurl + "?backurl=" + url);
-        }
-        else
+        try {
+            loghelper.error(err);
+            if (req.accepts().some((item, index, arry) => {
+                return "text/html,application/xhtml+xml,application/xml;".includes(item);
+            }) && !req.xhr) {
+                var url = encodeURI(req.protocol + "://" + req.header("host") + req.url);
+                res.redirect(Config.loginurl + "?back=" + url);
+            }
+            else
+                res.status(401).render('error', { message: err.message, error: err });
+        } catch (error) {
             res.status(401).render('error', { message: err.message, error: err });
+        }
+
     })
 });
 
@@ -64,8 +70,6 @@ app.use((req, res, next) => {
 app.use('/', routes);
 app.use('/users', users);
 app.use('/files', files);
-
-
 
 // error handlers
 
@@ -79,16 +83,20 @@ if (app.get('env') === 'development') {
             error: err
         });
     });
-} else {
-    // production error handler
-    // no stacktraces leaked to user
-    app.use((err: any, req, res, next) => {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: {}
-        });
-    });
 }
 
-export = app;
+// production error handler
+// no stacktraces leaked to user
+app.use((err: any, req, res, next) => {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+
+app.set('port', process.env.PORT || 3000);
+
+var server = app.listen(app.get('port'), function () {
+    loghelper.debug('Express server listening on port ' + server.address().port);
+});

@@ -1,10 +1,10 @@
-﻿import { TestLogHelper } from "./TestLogHelper";
+﻿import { LogHelper } from "./LogHelper";
 import { Config } from "../Config/Config";
 import { ClientRequest, request } from "http";
 
 export class PMSHelper {
 
-    constructor(protected log: ILog = new TestLogHelper()) {
+    constructor(protected log: ILog = new LogHelper()) {
     }
 
     private Contains(userid: number, pmsid: number): Promise<boolean> {
@@ -85,7 +85,7 @@ export class PmsResultEntity {
     public data: PmsEntity = new PmsEntity();
 }
 
-class PmsEntity {
+export class PmsEntity {
 
     constructor(public result: boolean = false, public children: number[] = new Array<number>())
     { }

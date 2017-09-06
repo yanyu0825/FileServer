@@ -19,7 +19,7 @@ export class RedisStringModel extends Base {
         return super.BaseValidate(key).then(result => {
             return inccmd.GetCount(key);
         }, error => {
-            return false;
+            return 0;
         });
     }
 

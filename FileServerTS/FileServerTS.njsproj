@@ -12,7 +12,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>c4ff3359-8434-4ca0-be67-9590e3d76bec</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>./bin/www</StartupFile>
+    <StartupFile>app.js</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -34,7 +34,8 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir />
+    <TypeScriptOutDir>
+    </TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptMapRoot />
@@ -65,12 +66,13 @@
     <TypeScriptCompile Include="Data\BaseRedis.ts" />
     <TypeScriptCompile Include="Data\CommonRedis.ts" />
     <TypeScriptCompile Include="Entity\FileInfoEntity.ts" />
+    <TypeScriptCompile Include="Helper\ClientHelper.ts" />
     <TypeScriptCompile Include="Helper\CrytoHelper.ts" />
     <TypeScriptCompile Include="Helper\Interface\ILog.ts" />
     <TypeScriptCompile Include="Helper\LogHelper.ts" />
     <TypeScriptCompile Include="Helper\PMSHelper.ts" />
-    <TypeScriptCompile Include="Helper\TestLogHelper.ts" />
     <TypeScriptCompile Include="model\Base.ts" />
+    <TypeScriptCompile Include="model\ClientIDModel.ts" />
     <TypeScriptCompile Include="model\FileInfoModel.ts" />
     <TypeScriptCompile Include="model\FileModel.ts" />
     <TypeScriptCompile Include="model\UserModel.ts" />
@@ -78,9 +80,6 @@
     <TypeScriptCompile Include="routes\Files.ts" />
     <TypeScriptCompile Include="routes\index.ts" />
     <TypeScriptCompile Include="routes\user.ts" />
-    <Content Include="bin\www">
-      <Publish>True</Publish>
-    </Content>
     <Content Include="package.json" />
     <Content Include="public\query.html" />
     <Content Include="public\test.html" />
@@ -92,7 +91,6 @@
     <Content Include="views\layout.jade" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\" />
     <Folder Include="Config\" />
     <Folder Include="Data\" />
     <Folder Include="Data\Interface\" />

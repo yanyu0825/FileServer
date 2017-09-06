@@ -1,4 +1,4 @@
-﻿import { TestLogHelper } from "../Helper/TestLogHelper"
+﻿//import { LogHelper } from "../Helper/LogHelper"
 //import { Config } from '../Config/Config';
 export class Base {
     //public config: Config = new Config();
@@ -7,5 +7,5 @@ export class Base {
         return Promise.resolve(!(!key));
     }
 
-    constructor(protected log: ILog = new TestLogHelper()) { }
+    constructor(protected log: ILog) { }
 }
