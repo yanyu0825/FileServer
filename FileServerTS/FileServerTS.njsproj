@@ -36,7 +36,7 @@
     <TypeScriptOutFile />
     <TypeScriptOutDir>
     </TypeScriptOutDir>
-    <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot>node_modules\@types</TypeScriptSourceRoot>

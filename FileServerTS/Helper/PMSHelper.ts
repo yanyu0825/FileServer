@@ -38,7 +38,7 @@ export class PMSHelper {
                             if (res.statusCode == 200) {
                                 console.log(chunks.toString());
                                 let result: PmsResultEntity = JSON.parse(chunks.toString());
-                                if (result.status == "success" && result.data.result)
+                                if (result.Status == "success" && result.Data.result)
                                     resolve(true);
                                 else
                                     resolve(false);
@@ -81,8 +81,8 @@ export class PMSHelper {
 }
 
 export class PmsResultEntity {
-    public status: string = null;
-    public data: PmsEntity = new PmsEntity();
+    public Status: string = null;
+    public Data: PmsEntity = new PmsEntity();
 }
 
 export class PmsEntity {

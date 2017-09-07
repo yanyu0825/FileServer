@@ -22,7 +22,7 @@ var fileinfomodel = new FileInfoModel(loghelper);
 
 
 /* 列出所有文件夹 最新的由自己创建的10文件. */
-router.get('/query/:size/:page', pmshelper.Use(123), (req, res) => {
+router.get('/query/:size/:page', pmshelper.Use(3), (req, res) => {
 
     let entity = new QueryFileInfoParamEntity();
     entity.size = req.params.size || 10;
@@ -42,7 +42,7 @@ router.get('/query/:size/:page', pmshelper.Use(123), (req, res) => {
 });
 
 /*获取文件网页打开*/
-router.get('/get/:code', pmshelper.Use(123),function (req, res, next) {
+router.get('/get/:code', pmshelper.Use(4),function (req, res, next) {
     console.log(req.route);
     fileinfomodel.Validate(req.params.code).then(result => {
         if (!result)
@@ -72,7 +72,7 @@ router.get('/get/:code', pmshelper.Use(123),function (req, res, next) {
 });
 
 /*下载文件*/
-router.get('/download/:code', pmshelper.Use(123), function (req, res) {
+router.get('/download/:code', pmshelper.Use(4), function (req, res) {
 
     fileinfomodel.Validate(req.params.code).then(result => {
         if (!result)
@@ -102,7 +102,7 @@ router.get('/download/:code', pmshelper.Use(123), function (req, res) {
 });
 
 /*上传多个文件*/
-router.post('/upload', pmshelper.Use(123),function (req, res) {
+router.post('/upload', pmshelper.Use(5),function (req, res) {
 
     //生成multiparty对象，并配置上传目标路径
     var form = new multiparty.Form({ autoFiles: true, uploadDir: Config.GetTempPath() });
@@ -116,7 +116,7 @@ router.post('/upload', pmshelper.Use(123),function (req, res) {
             else
                 return resolve(true);
         }).then(a => {
-            let tasks: Promise<boolean>[] = files.file.forEach(fileinfo => {
+            let tasks: Promise<boolean>[] = files.file.map(fileinfo => {
                 let entity: FileInfoEntity = new FileInfoEntity();
                 entity.code = guid.CrytoHelper.randomString(32);
                 entity.address = Config.GetSqlPath(fileinfo.path);
@@ -126,11 +126,7 @@ router.post('/upload', pmshelper.Use(123),function (req, res) {
             })
             return Promise.all(tasks);
         }).then(result => {
-            let r = false;
-            result.forEach(item => {
-                r = r && item;
-            })
-            return r;
+            return result.every(item => item);
         }).then(result => {
             res.json(result);
         }).catch(err => {
@@ -141,7 +137,7 @@ router.post('/upload', pmshelper.Use(123),function (req, res) {
 });
 
 /*删除文件*/
-router.get('/del/:code', pmshelper.Use(123), function (req, res) {
+router.get('/del/:code', pmshelper.Use(6), function (req, res) {
     //读取userid
     fileinfomodel.DeleteInfo(req.params.code, req.body.userid).then(result => {
         res.json(result);

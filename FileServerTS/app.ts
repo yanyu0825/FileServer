@@ -49,6 +49,11 @@ app.use((req, res, next) => {
         req.body["userid"] = result;
         next();
     }).catch(err => {
+        if (Config.opendebug)
+        {
+            req.body["userid"] = 1;
+            return next();
+        }
         try {
             loghelper.error(err);
             if (req.accepts().some((item, index, arry) => {

@@ -13,7 +13,7 @@ export class Config {
     public static token = { "maxage": 1200, name: "token" };
     //public static domain = "localhost";
 
-    public static openpms: boolean = false; //是否启用权限验证
+    public static openpms: boolean = true; //是否启用权限验证
     public static opendebug: boolean = true; //是否启用debug
     public static accountdb = { server: "ydg1988825.gicp.net", user: "sa", password: "Yanyu0825", database: "Account_New", pool: { max: 10, min: 0, idleTimeoutMillis: 30000 } };
 
