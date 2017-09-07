@@ -2,8 +2,8 @@
 
 block content
   h1= title
-  h1= 总数 = data.total 
-  h1= 当前页数 = data.page
+  h1 总数 = !{data.total}
+  h1 当前页数 = !{data.page}
   ul
     - each item in data.data 
      li 
