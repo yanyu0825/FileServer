@@ -34,7 +34,7 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir />
+    <TypeScriptOutDir>D:\release\file</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
     <TypeScriptMapRoot />
@@ -48,11 +48,11 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <TypeScriptCompile Include="Config\Config.ts" />
-    <TypeScriptCompile Include="Data\IncRedis.ts" />
+    <TypeScriptCompile Include="Data\BaseRedis.ts" />
+    <TypeScriptCompile Include="Data\CommonRedis.ts" />
     <TypeScriptCompile Include="Data\Interface\IConnection.ts" />
     <TypeScriptCompile Include="Data\Interface\MSCommand.ts" />
     <TypeScriptCompile Include="Data\Interface\RedisCommand.ts" />
-    <TypeScriptCompile Include="Data\StrRedis.ts" />
     <TypeScriptCompile Include="Data\FileInfoMS.ts" />
     <TypeScriptCompile Include="Helper\CrytoHelper.ts" />
     <TypeScriptCompile Include="Helper\Interface\ILog.ts" />

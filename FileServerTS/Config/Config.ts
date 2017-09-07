@@ -97,7 +97,7 @@ export class Config {
     //构造存储数据库中的path
     public static GetSqlPath(filename: string): string {
         var now = new Date();
-        return pathmethod.join(now.getFullYear().toString() + (now.getMonth() + 1).toString(), filename);
+        return pathmethod.join(now.getFullYear().toString() + (now.getMonth() + 1).toString(), pathmethod.basename(filename));
     }
 
 

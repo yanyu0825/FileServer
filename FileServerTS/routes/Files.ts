@@ -42,7 +42,7 @@ router.get('/query/:size/:page', pmshelper.Use(3), (req, res) => {
 });
 
 /*获取文件网页打开*/
-router.get('/get/:code', pmshelper.Use(4),function (req, res, next) {
+router.get('/get/:code', pmshelper.Use(4), function (req, res, next) {
     console.log(req.route);
     fileinfomodel.Validate(req.params.code).then(result => {
         if (!result)
@@ -61,8 +61,10 @@ router.get('/get/:code', pmshelper.Use(4),function (req, res, next) {
         //var content = fs.readFileSync(result.address);
         //res.end(content, "binary");
         res.sendFile(result, { root: "./" }, err => {
-            loghelper.error(err);
-            res.sendStatus(404);
+            if (err) {
+                loghelper.error(err);
+                res.sendStatus(404);
+            }
         });
     }).catch(err => {
         loghelper.error(err);
@@ -102,7 +104,7 @@ router.get('/download/:code', pmshelper.Use(4), function (req, res) {
 });
 
 /*上传多个文件*/
-router.post('/upload', pmshelper.Use(5),function (req, res) {
+router.post('/upload', pmshelper.Use(5), function (req, res) {
 
     //生成multiparty对象，并配置上传目标路径
     var form = new multiparty.Form({ autoFiles: true, uploadDir: Config.GetTempPath() });

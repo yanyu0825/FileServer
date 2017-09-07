@@ -1,6 +1,10 @@
 ﻿
 export class Config {
 
+    public static rediscache = { host: "ydg1988825.gicp.net", port: 6379, db: "0", connect_timeout: 5000 };
+    public static opendebug: boolean = true; //是否启用debug
+
+
     public static filesdb = {
         server: "ydg1988825.gicp.net",
         user: "sa",
@@ -12,7 +16,10 @@ export class Config {
             idleTimeoutMillis: 30000
         }
     };
-    public static filesredis = { host: "ydg1988825.gicp.net", port: 6379, db: "5" };
 
+    public static fileconfig = {
+        sourcefile:  '../FileServer/uploads/**/*',
+        distfile : '../FileServer/realfiles/'
+    }
 
 }

@@ -15,7 +15,7 @@ export class FileInfoMS {
         return this.rediscommand.execute(client => {
             client.input('code', TYPES.VarChar, "%" + code)//
             return client.query('update [files] set [status]=1 where  [address] like @code and [status]=0').then(result => {
-                back = result[0].rowsAffected > 0;
+                back = result.rowsAffected[0] > 0;
             });
         }).then(function () {
             return back;
@@ -30,12 +30,15 @@ export class FileInfoMS {
         return this.rediscommand.execute(client => {
             client.input('code', TYPES.VarChar, "%" + address)//
             return client.query('select  [address] from [files] where [address] like @code').then(result => {
-                if (result.recordset && result.recordset[0] && result.recordset[0].address) {
-                    var add = result.recordset[0].address;
-                    back = add.substring(0, add.length - address.length);
-                }
-                else
-                    throw new Error("无数据");
+
+                result.recordset.forEach(item => {
+                    if (item.address) {
+                        var add = item.address;
+                        back = add.substring(0, add.length - address.length);
+                    }
+                })
+                if (!back) 
+                    throw new Error(`无数据:${address}`);
             });
         }).then(() => {
             return back;

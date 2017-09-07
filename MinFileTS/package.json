@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "MinFileTS",
   "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
   "author": {
     "name": "yandingguo"
   },
