@@ -1,0 +1,29 @@
+{
+  "name": "time-task",
+  "version": "0.0.0",
+  "description": "TimeTask",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "author": {
+    "name": "yandingguo"
+  },
+  "dependencies": {
+    "node-schedule": "^1.2.4",
+    "mssql": "^4.0.4",
+    "redis": "^2.7.1",
+    "gulp": "^3.9.1",
+    "gulp-cache": "^0.4.5",
+    "gulp-imagemin": "^3.1.1",
+    "imagemin-pngquant": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/gulp": "^4.0.4",
+    "@types/mssql": "^4.0.5",
+    "@types/multiparty": "0.0.31",
+    "@types/node": "^8.0.27",
+    "@types/node-schedule": "^1.2.0",
+    "@types/redis": "^2.6.0"
+  }
+}

@@ -11,6 +11,8 @@ Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "MinFileTS", "MinFileTS\MinF
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "FileServerTS", "FileServerTS\FileServerTS.njsproj", "{C4FF3359-8434-4CA0-BE67-9590E3D76BEC}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "TimeTask", "TimeTask\TimeTask.njsproj", "{ABF9A9DC-998F-434F-9833-810DF83AA787}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C4FF3359-8434-4CA0-BE67-9590E3D76BEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4FF3359-8434-4CA0-BE67-9590E3D76BEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4FF3359-8434-4CA0-BE67-9590E3D76BEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABF9A9DC-998F-434F-9833-810DF83AA787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABF9A9DC-998F-434F-9833-810DF83AA787}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABF9A9DC-998F-434F-9833-810DF83AA787}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABF9A9DC-998F-434F-9833-810DF83AA787}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
