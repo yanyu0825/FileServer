@@ -80,6 +80,11 @@ export class Config {
         this.CreateDirextory(path);
         return path;
     }
+
+    public static GetOriginPath(sqlpath: string): string {
+        return pathmethod.join(this.fileconfig.tempdir, pathmethod.basename(sqlpath));
+    }
+
     //读取默认文件地址
     public static GetDefaultPath(mimetype): string {
         var path = null;

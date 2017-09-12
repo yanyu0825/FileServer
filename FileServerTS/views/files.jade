@@ -4,7 +4,21 @@ block content
   h1= title
   h1 总数 = !{data.total}
   h1 当前页数 = !{data.page}
-  ul
+
+  .container.gallery-container
+  h1 Bootstrap 3 Gallery
+  p.page-description.text-center Clean Layout With Minimal Styles
+  .tz-gallery
     - each item in data.data 
-     li 
-        img(src = "/files/get/#{item.code}")
+        .row
+          .col-sm-6.col-md-4
+            .thumbnail
+              a.lightbox(href='/files/get/#{item.code}')
+                img(src='/files/get/#{item.code}', alt='Park')
+              .caption
+                h3 Thumbnail label
+                p 图片描述...
+  //script(type='text/javascript', src='https://cdn.bootcss.com/baguettebox.js/1.8.2/baguetteBox.min.js')
+  script(type='text/javascript').
+    baguetteBox.run('.tz-gallery');
+

@@ -11,6 +11,7 @@ import { LogHelper } from './Helper/LogHelper';
 import routes = require('./routes/index');
 import users = require('./routes/user');
 import files = require('./routes/files');
+import file = require('./routes/file');
 
 var loghelper = new LogHelper();
 var usermodel = new UserModel(loghelper);
@@ -30,6 +31,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser('secret'));
 //app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/file', file);//不需要登录的方法
 
 //账号登录状态验证
 app.use((req, res, next) => {

@@ -20,7 +20,7 @@ export class FileInfoMS {
             return client.query('select [code],[address],[createtime] ,[createuserid] as userid,[mimetype],[status] from  [files] where code=@code').then(result => {
                 back = result.recordset[0];
             });
-        }).then(()=> {
+        }).then(() => {
             return back;
         })
     }
@@ -56,6 +56,20 @@ export class FileInfoMS {
         })
     }
 
+    //禁用文件
+    public enabled(code: string, userid: number): Promise<boolean> {
+        let back: boolean = false;
+        return this.command.execute(client => {
+            client.input('code', TYPES.VarChar, code)//
+            client.input('userid', TYPES.Int, userid)//
+            return client.query('update [files] set [status]=1 where  [code] = @code;   insert into [FileLog] ([filecode],[userid],[type]) values(@code,@userid,\'enabled\')').then(result => {
+                back = result.rowsAffected[0] > 0 && result.rowsAffected[1] > 0;
+            });
+        }).then(() => {
+            return back;
+        })
+    }
+
     //查询文件信息
     public queryinfo(param: QueryFileInfoParamEntity): Promise<QueryResultEntity<FileInfoEntity>> {
         let back: QueryResultEntity<FileInfoEntity> = new QueryResultEntity<FileInfoEntity>();
@@ -66,7 +80,17 @@ export class FileInfoMS {
             if (param.userid > 0) {
                 condition += " and createuserid=" + param.userid;
             }
+            if (param.status != null) {
+                condition += " and [status]=" + (param.status == true ? 1 : 0);
+            }
 
+
+
+
+
+
+            if (condition.length < 3)
+                condition = " and 1=1 ";
             client.input('tblName', TYPES.NVarChar(200), "Files")//表名
             client.input('fldName', TYPES.NVarChar(2000), "[code],[address],[createtime],[createuserid],[mimetype],[status]")//字段
             client.input('pageSize', TYPES.Int, param.size)//

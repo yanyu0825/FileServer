@@ -49,8 +49,8 @@ export class FileInfoModel extends Base {
                 if (!a)
                     this.log.debug("添加缓存信息失败");
                 return result;
-                }, err => {
-                    this.log.error(err, "添加缓存信息失败");
+            }, err => {
+                this.log.error(err, "添加缓存信息失败");
                 return result;
             });
         });
@@ -64,6 +64,26 @@ export class FileInfoModel extends Base {
             //删除数据缓存
             return fileinforedis.Disabled(code);
         })
+
+    }
+
+    public Check(code: string, userid: number, status: boolean): Promise<boolean> {
+        if (status)
+            return fileinfoms.enabled(code, userid).then(result => {
+                if (!result) {
+                    throw new Error("启用文件失败")
+                }
+                //删除数据缓存
+                return result;
+            })
+        else
+            return fileinfoms.disabled(code, userid).then(result => {
+                if (!result) {
+                    throw new Error("禁用文件失败")
+                }
+                //删除数据缓存
+                return fileinforedis.Disabled(code);
+            })
 
     }
 

@@ -7,7 +7,7 @@ export class PMSHelper {
     constructor(protected log: ILog = new LogHelper()) {
     }
 
-    private Contains(userid: number, pmsid: number): Promise<boolean> {
+    public Contains(userid: number, pmsid: number): Promise<boolean> {
         if (!Config.openpms)
             return Promise.resolve(true);
         else

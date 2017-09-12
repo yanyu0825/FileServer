@@ -4,7 +4,7 @@ import { Config } from "../Config/Config";
 import _PATH = require('path');
 import { LogHelper } from "../Helper/LogHelper";
 import * as gulp from "gulp";
-import { fsync, exists, unlink} from "fs";
+import { fsync, exists, unlink } from "fs";
 
 var imagemin = require('gulp-imagemin'),
     //gulp = require('gulp'),
@@ -21,8 +21,8 @@ export class FileMinTask implements ITask<string> {
                 return new Promise<boolean>((resolve, reject) => {
                     let originalpath = _PATH.normalize(_PATH.join(Config.fileconfig.sourcefile, _PATH.basename(item)));
                     var destpath = _PATH.normalize(_PATH.join(Config.fileconfig.distfile, item));
-                    exists(originalpath, (exists) => {
-                        if (exists) {
+                    exists(originalpath, (originalexists) => {
+                        if (originalexists) {
                             //压缩文件
                             gulp.src(originalpath)
                                 .pipe(cache(imagemin({
@@ -40,6 +40,7 @@ export class FileMinTask implements ITask<string> {
                                     use: [pngquant()]
                                 })))
                                 .pipe(gulp.dest(file => {
+                                    originalpath = file.path;
                                     return _PATH.dirname(destpath);
                                 }))
                                 .on('end', () => {
@@ -51,13 +52,18 @@ export class FileMinTask implements ITask<string> {
                                         else
                                             resolve(true);
                                     });
-                                    
+
                                 }).on('error', (err) => {
                                     //new LogHelper().error(err, `同步文件失败`);
                                     reject(err);
                                 });
                         } else {
-                            reject(new Error(`${originalpath}不存在`));
+                            exists(destpath, (destexists) => {
+                                if (destexists)
+                                    resolve(true);
+                                else
+                                    reject(new Error(`${originalpath}不存在`));
+                            })
                         }
                     });
                 });
