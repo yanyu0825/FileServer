@@ -4,7 +4,7 @@ import { Config } from "../Config/Config";
 import _PATH = require('path');
 import { LogHelper } from "../Helper/LogHelper";
 import * as gulp from "gulp";
-import { fsync, exists } from "fs";
+import { fsync, exists, unlink} from "fs";
 
 var imagemin = require('gulp-imagemin'),
     //gulp = require('gulp'),
@@ -43,8 +43,15 @@ export class FileMinTask implements ITask<string> {
                                     return _PATH.dirname(destpath);
                                 }))
                                 .on('end', () => {
-                                    console.log(`${destpath}文件被写入成功`)
-                                    resolve(true);
+                                    console.log(`${destpath}文件被写入成功`);
+                                    //删除文件
+                                    unlink(originalpath, err => {
+                                        if (err)
+                                            reject(err);
+                                        else
+                                            resolve(true);
+                                    });
+                                    
                                 }).on('error', (err) => {
                                     //new LogHelper().error(err, `同步文件失败`);
                                     reject(err);

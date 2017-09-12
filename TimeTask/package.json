@@ -4,7 +4,8 @@
   "description": "TimeTask",
   "main": "app.js",
   "scripts": {
-    "start": "node app"
+    "start": "node app",
+    "service": "node service"
   },
   "author": {
     "name": "yandingguo"

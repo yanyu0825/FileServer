@@ -46,7 +46,7 @@ tasks.forEach(task => {
                 })
             }
         }).then(() => {
-            loghelper.debug(job.name + "--执行完毕", job.name)
+            //loghelper.debug(job.name + "--执行完毕", job.name)
         }).catch(err => {
             loghelper.error(err, job.name)
         })
