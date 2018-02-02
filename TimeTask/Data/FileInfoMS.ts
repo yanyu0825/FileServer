@@ -4,15 +4,15 @@ import { TYPES } from "mssql";
 //clientid 缓存
 export class FileInfoMS {
 
-    private rediscommand: MSCommand = null;
+    //private rediscommand: MSCommand = null;
 
-    constructor(config) {
-        this.rediscommand = new MSCommand(config);
+    constructor(private config) {
+        //this.rediscommand = new MSCommand(config);
     }
 
     public EnabledFile(code: string): Promise<boolean> {
         let back: boolean = false;
-        return this.rediscommand.execute(client => {
+        return new MSCommand(this.config).execute(client => {
             client.input('code', TYPES.VarChar, "%" + code)//
             return client.query('update [files] set [status]=1 where  [address] like @code and [status]=0').then(result => {
                 back = result.rowsAffected[0] > 0;
@@ -27,7 +27,7 @@ export class FileInfoMS {
         let back: string = null;
 
         //执行查询
-        return this.rediscommand.execute(client => {
+        return new MSCommand(this.config).execute(client => {
             client.input('code', TYPES.VarChar, "%" + address)//
             return client.query('select  [address] from [files] where [address] like @code').then(result => {
 
@@ -49,7 +49,7 @@ export class FileInfoMS {
     public GetChangeFilePath(time: Date): Promise<string[]> {
         let back: string[] = [];
         //执行查询
-        return this.rediscommand.execute(client => {
+        return new MSCommand(this.config).execute(client => {
             client.input('time', TYPES.DateTime, time)//
             return client.query('select a.[address] from [files](nolock) a join [FileLog](nolock) b on a.[code]=b.filecode where a.[status]=1 and b.[time]>=@time').then(result => {
                 result.recordset.forEach(item => {
